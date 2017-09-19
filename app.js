@@ -10,9 +10,16 @@ app.use(express.static('public'));
 
 app.get('/', function (req, res) {
     var queryString = encodeURIComponent(req.query.term);
-    giphy.search(queryString, function (err, response) {
-        res.render('home', {gifs: response.data});
-    });
+    console.log(queryString);
+    if (queryString == "") {
+        giphy.trending(function (err, response) {
+            res.render('home', {term: req.query.term, gifs: response.data});
+        });
+    } else {
+        giphy.search(queryString, function (err, response) {
+            res.render('home', {term: req.query.term, gifs: response.data});
+        });
+    }
 });
 
 // app.get('/', function (req, res) {
